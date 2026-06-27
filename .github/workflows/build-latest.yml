@@ -65,7 +65,7 @@ jobs:
           fi
 
   windows-build:
-    runs-on: [self-hosted, linux, x64, wine, msvc]
+    runs-on: windows-latest
     needs: check-commit
     outputs:
       type: ${{ needs.check-commit.outputs.type }}
@@ -75,27 +75,24 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build DLL with Wine+MSVC (${{ needs.check-commit.outputs.build_config }})
+      - name: Setup MSVC environment
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Configure & Build (${{ needs.check-commit.outputs.build_config }})
+        shell: cmd
         run: |
-          export WINEPREFIX=/opt/wine
-          source /opt/msvc/bin/x64/msvcenv.sh
-          CPPWINRT="/opt/msvc/Windows Kits/10/Include/10.0.26100.0/cppwinrt"
-
-          rm -rf build
-          mkdir build
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+          if not exist build mkdir build
           cd build
-
-          cmake -G Ninja \
-            -DCMAKE_BUILD_TYPE=${{ needs.check-commit.outputs.build_config }} \
-            -DCMAKE_C_COMPILER=/opt/msvc/bin/x64/cl \
-            -DCMAKE_CXX_COMPILER=/opt/msvc/bin/x64/cl \
-            -DCMAKE_LINKER=/opt/msvc/bin/x64/link \
-            -DCMAKE_RC_COMPILER=/opt/msvc/bin/x64/rc \
-            -DCMAKE_SYSTEM_NAME=Windows \
-            "-DCMAKE_CXX_FLAGS=/I\"$CPPWINRT\"" \
+          cmake -G Ninja ^
+            -DCMAKE_BUILD_TYPE=${{ needs.check-commit.outputs.build_config }} ^
+            -DCMAKE_C_COMPILER=cl ^
+            -DCMAKE_CXX_COMPILER=cl ^
             ..
-
-          ninja -j$(nproc)
+          ninja -j%NUMBER_OF_PROCESSORS%
 
       - name: Upload DLL and PDB Artifacts
         if: always()
