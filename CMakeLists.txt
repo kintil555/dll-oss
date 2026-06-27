@@ -79,6 +79,7 @@ add_compile_definitions(
 
 file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.hpp")
 file(GLOB_RECURSE LIB_FILES "lib/*.cpp" "lib/*.h")
+file(GLOB_RECURSE SCRIPTING_FILES "src/Scripting/*.cpp" "src/Scripting/*.hpp" "src/Scripting/*.h")
 add_library(Flarial SHARED main.cpp ${SOURCE_FILES} ${LIB_FILES} src/Assets/Assets.rc
         src/SDK/Client/Network/Packet/AnimatePacket.hpp
         src/Client/Module/Modules/Subtitles/Subtitles.cpp
@@ -161,7 +162,7 @@ FetchContent_Declare(
 FetchContent_Declare(
         LuaBridge
         GIT_REPOSITORY https://github.com/kunitoki/LuaBridge3.git
-        GIT_TAG        3.0-rc4
+        GIT_TAG        v3.0-beta5
 )
 
 FetchContent_Declare(
@@ -190,6 +191,14 @@ FetchContent_Declare(
 
 set(FMT_MODULE OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(libhat entt nes fmt magic_enum LuaBridge safetyhook jsoncpp discord-rpc rift)
+
+# Workaround: MSVC 19.51 (VS 18.0) has an ICE with deeply-nested lambda templates
+# in LuaBridge3. Disable inlining for Scripting files to prevent the crash.
+if(MSVC)
+    set_source_files_properties(${SCRIPTING_FILES} PROPERTIES
+        COMPILE_FLAGS "/Od /Ob0"
+    )
+endif()
 
 target_link_libraries(Flarial PRIVATE jsoncpp safetyhook libcurl ws2_32.lib crypt32.lib normaliz.lib wldap32.lib LuaBridge lua_static libhat fmt::fmt EnTT::EnTT NES windowscodecs.lib urlmon.lib dwrite.lib d3d12.lib dxgi.lib d3d11.lib d2d1.lib wininet.lib setupapi.lib version FreeType magic_enum runtimeobject discord-rpc rift)
 
