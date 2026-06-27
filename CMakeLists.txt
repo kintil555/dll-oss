@@ -149,19 +149,19 @@ FetchContent_Declare(
 FetchContent_Declare(
         fmt
         GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-        GIT_TAG        master
+        GIT_TAG        11.0.2
 )
 
 FetchContent_Declare(
         magic_enum
         GIT_REPOSITORY https://github.com/Neargye/magic_enum.git
-        GIT_TAG        master
+        GIT_TAG        v0.9.6
 )
 
 FetchContent_Declare(
         LuaBridge
         GIT_REPOSITORY https://github.com/kunitoki/LuaBridge3.git
-        GIT_TAG        master
+        GIT_TAG        3.0-rc4
 )
 
 FetchContent_Declare(
