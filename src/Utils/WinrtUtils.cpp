@@ -460,14 +460,41 @@ std::vector<std::string> WinrtUtils::pickFilesSync(const std::string& filter) {
 void WinrtUtils::cacheUIHandles() noexcept {
     try {
         Logger::debug("Caching UI handles in WinrtUtils... (thread id {})", GetCurrentThreadId());
-        // MUST be called on the UI thread. Safe operations only here.
-        auto window = winrt::Windows::ApplicationModel::Core::CoreApplication::MainView().CoreWindow();
-        auto dispatcher = window.Dispatcher();
+
+        // On GDK/Win32, CoreApplication::MainView().CoreWindow() can throw or
+        // return an invalid object when called from a non-UI thread during early
+        // initialization (reproduces as SIGSEGV read @ 0x3 on 1.26.X).
+        // Wrap each WinRT call separately so we can bail cleanly.
+        winrt::Windows::UI::Core::CoreWindow window{ nullptr };
+        winrt::Windows::UI::Core::CoreDispatcher dispatcher{ nullptr };
+
+        try {
+            auto mainView = winrt::Windows::ApplicationModel::Core::CoreApplication::MainView();
+            window = mainView.CoreWindow();
+        } catch (...) {
+            Logger::debug("Failed to cache UI handles in WinrtUtils!");
+            return;
+        }
+
+        // window can be non-null but internally invalid on GDK —
+        // accessing .Dispatcher() would AV. Catch that too.
+        try {
+            dispatcher = window.Dispatcher();
+        } catch (...) {
+            Logger::debug("Failed to cache UI handles in WinrtUtils!");
+            return;
+        }
+
+        if (!window || !dispatcher) {
+            Logger::debug("Failed to cache UI handles in WinrtUtils!");
+            return;
+        }
 
         std::lock_guard<std::mutex> lk(s_uiMutex);
-        s_coreWindow = window;
+        s_coreWindow     = window;
         s_coreDispatcher = dispatcher;
         s_handlesCached.store(true, std::memory_order_release);
+        g_uiCached.store(true, std::memory_order_release);
         Logger::debug("UI handles cached! :3");
     } catch (...) {
         Logger::debug("Failed to cache UI handles in WinrtUtils!");
