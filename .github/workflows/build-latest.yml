@@ -75,8 +75,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup MSVC environment
-        uses: microsoft/setup-msbuild@v2
+      - name: Setup MSVC (vcvarsall via ilammy)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v5
@@ -84,7 +86,6 @@ jobs:
       - name: Configure & Build (${{ needs.check-commit.outputs.build_config }})
         shell: cmd
         run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
           if not exist build mkdir build
           cd build
           cmake -G Ninja ^
