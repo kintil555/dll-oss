@@ -162,7 +162,7 @@ FetchContent_Declare(
 FetchContent_Declare(
         LuaBridge
         GIT_REPOSITORY https://github.com/kunitoki/LuaBridge3.git
-        GIT_TAG        v3.0-beta5
+        GIT_TAG        3.0-rc4
 )
 
 FetchContent_Declare(

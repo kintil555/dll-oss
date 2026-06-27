@@ -1,5 +1,13 @@
 #pragma once
 
+// Workaround: MSVC 19.51 (VS 18.0) internal compiler error (ICE) with
+// deeply-nested lambda templates from LuaBridge3. Disabling inlining
+// for this translation unit prevents the crash. Safe to remove once
+// Microsoft fixes the bug (developercommunity.visualstudio.com).
+#if defined(_MSC_VER)
+#pragma optimize("", off)
+#endif
+
 #include "ScriptLib.hpp"
 
 #include <curl/curl/curl.h>
@@ -165,3 +173,7 @@ private:
         return script;
     }
 };
+
+#if defined(_MSC_VER)
+#pragma optimize("", on)
+#endif
