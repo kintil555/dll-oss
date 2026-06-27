@@ -59,6 +59,7 @@
 #include "Modules/Misc/HiveModeCatcher/HiveModeCatcherListener.hpp"
 #include "Modules/HitPing/HitPing.hpp"
 #include "Modules/InstantHurtAnimation/InstantHurtAnimation.hpp"
+#include "Modules/AutoJump/AutoJump.hpp"
 #include <Modules/Misc/InputImGUi/GUIMouseListener.hpp>
 #include <Modules/Misc/InputImGUi/GUIKeyListener.hpp>
 #include <Modules/Misc/PackChanger/PackChanger.hpp>
@@ -250,6 +251,7 @@ void ModuleManager::initialize() {
 	addModule<HiveUtils>();
 	addModule<HitPing>();
 	addModule<InstantHurtAnimation>();
+	addModule<AutoJump>();
 	addModule<OpponentReach>();
 	addModule<ViewModel>();
 	addModule<PotionHUD>();

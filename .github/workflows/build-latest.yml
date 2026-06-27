@@ -98,12 +98,15 @@ jobs:
           ninja -j$(nproc)
 
       - name: Upload DLL and PDB Artifacts
+        if: always()
         uses: actions/upload-artifact@v4.6.1
         with:
-          name: Flarial_DLL_${{ needs.check-commit.outputs.build_config }}
+          name: Flarial_DLL_${{ needs.check-commit.outputs.build_config }}_${{ github.sha }}
           path: |
             build/Flarial.dll
             build/Flarial.pdb
+          if-no-files-found: warn
+          retention-days: ${{ needs.check-commit.outputs.build_config == 'Debug' && '14' || '90' }}
 
   upload-to-cdn:
     runs-on: ubuntu-latest
