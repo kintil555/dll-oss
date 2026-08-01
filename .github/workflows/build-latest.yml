@@ -83,6 +83,15 @@ jobs:
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v5
 
+      - name: Configure git credentials for FetchContent
+        shell: bash
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --global credential.helper store
+          echo "https://x-access-token:${GH_PAT}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${GH_PAT}@github.com/".insteadOf "https://github.com/"
+
       - name: Configure & Build (${{ needs.check-commit.outputs.build_config }})
         shell: cmd
         run: |
