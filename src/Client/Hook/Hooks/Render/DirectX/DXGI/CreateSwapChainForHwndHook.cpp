@@ -26,6 +26,15 @@ HRESULT CreateSwapChainForHwndHook::hkCreateSwapChainForHwnd(IDXGIFactory2 *pFac
     if (SUCCEEDED(hr)) {
         Logger::debug("[Swapchain] CreateSwapChainForHwnd succeeded (isDX12={})", isDX12Device);
 
+        // GDK 26.x: hWnd dari swapchain nyata adalah sumber paling reliable untuk window handle.
+        // window2 dipakai ImGui_ImplWin32_Init, Client::window dipakai UnicodeWndProcHack & cursor.
+        extern HWND window2;
+        if (hWnd && IsWindow(hWnd)) {
+            if (!window2) window2 = hWnd;
+            if (!Client::window) Client::window = hWnd;
+            Logger::success("[Swapchain] Captured game HWND from CreateSwapChainForHwnd: {}", (void*)hWnd);
+        }
+
         // Capture DX12 command queue if not already captured.
         // This mirrors what CreateSwapchainForCoreWindowHook does and is critical for
         // the case where kiero detected DX11 but the game is actually DX12 —

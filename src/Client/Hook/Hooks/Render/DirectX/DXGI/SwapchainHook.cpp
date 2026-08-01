@@ -32,7 +32,33 @@ static std::chrono::high_resolution_clock fpsclock;
 static std::chrono::steady_clock::time_point start = std::chrono::high_resolution_clock::now();
 static std::chrono::steady_clock::time_point previousFrameTime = std::chrono::high_resolution_clock::now();
 
-HWND window2 = FindWindowA(nullptr, "Minecraft");
+// GDK Minecraft 26.x+ pakai window class "Bedrock", bukan title "Minecraft"
+// Cari via class name dulu, fallback ke title
+static HWND FindGameWindowGDK() {
+    const DWORD myPid = GetCurrentProcessId();
+    // Primary: window class "Bedrock" (GDK 1.21.120+ / 26.x)
+    HWND w = nullptr;
+    while ((w = FindWindowExW(nullptr, w, L"Bedrock", nullptr))) {
+        DWORD pid = 0; GetWindowThreadProcessId(w, &pid);
+        if (pid == myPid) return w;
+    }
+    // Fallback 1: title "Minecraft"
+    w = FindWindowA(nullptr, "Minecraft");
+    if (w) return w;
+    // Fallback 2: enumerate visible window besar milik proses ini
+    struct Ctx { DWORD pid; HWND result; };
+    Ctx ctx{ myPid, nullptr };
+    EnumWindows([](HWND h, LPARAM lp) -> BOOL {
+        auto* c = reinterpret_cast<Ctx*>(lp);
+        DWORD pid = 0; GetWindowThreadProcessId(h, &pid);
+        if (pid != c->pid || !IsWindowVisible(h)) return TRUE;
+        RECT r{}; GetClientRect(h, &r);
+        if (r.right > 200 && r.bottom > 200) { c->result = h; return FALSE; }
+        return TRUE;
+    }, reinterpret_cast<LPARAM>(&ctx));
+    return ctx.result;
+}
+HWND window2 = FindGameWindowGDK();
 
 int SwapchainHook::currentBitmap;
 
@@ -91,11 +117,12 @@ void SwapchainHook::enableHook() {
     if (Client::settings.getSettingByName<bool>("killdx")->value) recreate = true;
 
     if (!window2) {
-        window2 = FindWindowByTitle("Minecraft");
+        window2 = FindGameWindowGDK();
     }
 
-    if (!window2) {
-        window2 = FindWindowByTitle("Flarial");
+    // Set Client::window — dibutuhkan UnicodeWndProcHack dan CursorHandler
+    if (!Client::window) {
+        Client::window = window2;
     }
 
     // Phase 1: Hook Present using kiero's vtable guess.
