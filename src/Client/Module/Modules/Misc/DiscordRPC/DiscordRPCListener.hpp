@@ -6,7 +6,9 @@
 #include "Utils/PlatformUtils.hpp"
 #include "Utils/Threading.hpp"
 
+#ifdef DISCORD_RPC_ENABLED
 #include <discord-rpc.hpp>
+#endif
 
 static std::mutex g_pendingTitleMutex;
 static std::optional<std::string> g_pendingTitle;
@@ -24,6 +26,7 @@ static LocalPlayer* safeGetLocalPlayer() {
     }
 }
 
+#ifdef DISCORD_RPC_ENABLED
 class DiscordRPCListener : public Listener {
 private:
     static constexpr const char* CLIENT_ID = "1058426966602174474";
@@ -270,3 +273,11 @@ private:
         }
     }
 };
+#else
+// DiscordRPC disabled - discord-presence library not available
+class DiscordRPCListener : public Listener {
+public:
+    DiscordRPCListener() {}
+    ~DiscordRPCListener() {}
+};
+#endif // DISCORD_RPC_ENABLED

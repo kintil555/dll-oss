@@ -14,7 +14,8 @@
 
 #include "curl/curl/curl.h"
 #include "Hook/Hooks/Game/UnicodeWndProcHack.hpp"
-#include "Modules/Misc/DiscordRPC/DiscordRPCListener.hpp"
+// DiscordRPC disabled (discord-presence not available)
+// #include "Modules/Misc/DiscordRPC/DiscordRPCListener.hpp"
 #include "Scripting/ScriptManager.hpp"
 #include "Utils/Memory/Game/SignatureAndOffsetManager.hpp"
 #include "src/Utils/Logger/crashlogs.hpp"

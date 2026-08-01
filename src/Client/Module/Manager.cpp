@@ -54,7 +54,8 @@
 #include "Modules/Hitbox/Hitbox.hpp"
 #include "Modules/NoHurtCam/NoHurtCam.hpp"
 #include "Modules/CommandHotkey/CommandHotkey.hpp"
-#include "Modules/Misc/DiscordRPC/DiscordRPCListener.hpp"
+// DiscordRPC disabled (discord-presence not available)
+// #include "Modules/Misc/DiscordRPC/DiscordRPCListener.hpp"
 #include "Modules/HiveUtils/HiveUtils.hpp"
 #include "Modules/Misc/HiveModeCatcher/HiveModeCatcherListener.hpp"
 #include "Modules/HitPing/HitPing.hpp"
@@ -350,7 +351,7 @@ void ModuleManager::initialize() {
 	if (!VersionUtils::checkAboveOrEqual(21, 60)) {
 		addService<PackChanger>();
 	}
-	addService<DiscordRPCListener>();
+	// addService<DiscordRPCListener>(); // DiscordRPC disabled
 	addService<UninjectListener>();
 	addService<SaveConfigListener>();
 	addService<CentreCursorListener>();
