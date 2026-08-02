@@ -17,11 +17,6 @@ std::string VersionUtils::getFormattedVersion() {
         return "1.21.131";
     }
 
-    // 1.26.33.x -> return "1.26.33"
-    if (parts.size() >= 3 && parts[0] == "1" && parts[1] == "26" && parts[2].substr(0,2) == "33") {
-        return "1.26.33";
-    }
-
     if (currentVersion.build == 130) { // dude
         return "1.21.13";
     }
@@ -50,6 +45,11 @@ std::string VersionUtils::getFormattedVersion() {
     // Ensure at least major and minor parts exist
     if (parts.size() < 2) {
         return version; // Invalid version format
+    }
+
+    // 1.26.33.x -> "1.26.33"
+    if (parts.size() >= 3 && parts[0] == "1" && parts[1] == "26" && parts[2].size() >= 2 && parts[2].substr(0,2) == "33") {
+        return "1.26.33";
     }
 
     // Construct formatted version string
