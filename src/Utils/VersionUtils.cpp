@@ -17,6 +17,11 @@ std::string VersionUtils::getFormattedVersion() {
         return "1.21.131";
     }
 
+    // 1.26.33.x -> return "1.26.33"
+    if (parts.size() >= 3 && parts[0] == "1" && parts[1] == "26" && parts[2].substr(0,2) == "33") {
+        return "1.26.33";
+    }
+
     if (currentVersion.build == 130) { // dude
         return "1.21.13";
     }
@@ -58,6 +63,7 @@ std::string VersionUtils::getFormattedVersion() {
 
 void VersionUtils::initialize() {
     versions = {
+         {"1.26.33", {SigInit::init2633, OffsetInit::init260}},  // MC GDK 1.26.33 (Latite sigs)
          {"1.26.3", {SigInit::init260, OffsetInit::init260}},
         {"1.26.2", {SigInit::init260, OffsetInit::init260}},
         {"1.26.1", {SigInit::init260, OffsetInit::init260}},

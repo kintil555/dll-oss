@@ -1120,3 +1120,50 @@ void SigInit::init2030() {
 
     ADD_SIG("LevelRenderer::renderLevel", "48 8B C4 48 89 58 20 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 B8 0F 29 78 A8 44 0F 29 40 ? 44 0F 29 48 ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 4C 89 44 24 ?");
 }
+
+void SigInit::init2633() {
+    Logger::custom(fg(fmt::color::gold), "Signatures", "Loading sigs for 1.26.33 (Latite)");
+
+    // Inherit semua sig dari 1.26.x sebagai base
+    init260();
+
+    // Override signatures yang berubah di 1.26.33 dari Latite Addresses.h
+
+    ADD_SIG("LevelRenderer::renderLevel",        "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 89 D6 4C 8B 3D");
+    ADD_SIG("LocalPlayer::applyTurnDelta",        "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 44 0F 29 BD ? ? ? ? 44 0F 29 B5 ? ? ? ? 44 0F 29 AD ? ? ? ? 44 0F 29 A5 ? ? ? ? 44 0F 29 9D ? ? ? ? 44 0F 29 95 ? ? ? ? 44 0F 29 8D ? ? ? ? 44 0F 29 85 ? ? ? ? 0F 29 BD ? ? ? ? 0F 29 B5 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 48 89 CE 8B 05");
+    ADD_SIG("ClientInstance::grabCursor",         "56 48 83 EC ? 48 89 CE 48 8B 01 48 8B 80 ? ? ? ? FF 15 ? ? ? ? 84 C0 74 ? 48 8B 8E ? ? ? ? 48 8B 01 48 8B 80 ? ? ? ? 48 8B 15 ? ? ? ? 48 83 C4 ? 5E 48 FF E2 90 48 83 C4 ? 5E C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 56 48 83 EC");
+    ADD_SIG("ClientInstance::releaseCursor",      "56 48 83 EC ? 48 89 CE 48 8B 01 48 8B 80 ? ? ? ? FF 15 ? ? ? ? 84 C0 74 ? 48 8B 8E ? ? ? ? 48 8B 01 48 8B 80 ? ? ? ? 48 8B 15 ? ? ? ? 48 83 C4 ? 5E 48 FF E2 90 48 83 C4 ? 5E C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 56 53");
+    ADD_SIG("MultiPlayerLevel::_subTick",         "55 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 44 0F 29 6D");
+    ADD_SIG("ChatScreenController::sendChatMessage","E8 ? ? ? ? 3C ? 75 ? 48 8B 8E ? ? ? ? 48 C7 45 ? ? ? ? ? 48 8B 01 48 8B 40 ? 48 8D 55 ? FF 15 ? ? ? ? 48 8B 4D");
+    ADD_SIG("ScreenView::setupAndRender",         "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 44 0F 29 BD ? ? ? ? 44 0F 29 B5 ? ? ? ? 44 0F 29 AD ? ? ? ? 44 0F 29 A5 ? ? ? ? 44 0F 29 9D ? ? ? ? 44 0F 29 95 ? ? ? ? 44 0F 29 8D ? ? ? ? 44 0F 29 85 ? ? ? ? 0F 29 BD ? ? ? ? 0F 29 B5 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 48 89 CE 8B 05");
+    ADD_SIG("MinecraftGame::_update",             "E8 ? ? ? ? 48 8B 8F ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 48 8B 9F");
+    ADD_SIG("RakPeer::GetAveragePing",            "56 57 48 83 EC ? 48 89 CE B9 ? ? ? ? FF 15");
+    ADD_SIG("ItemRenderer::renderGuiItemNew",     "E8 ? ? ? ? 48 8D 55 ? 4C 8D 85 ? ? ? ? 48 89 F1 E8 ? ? ? ? 80 BF");
+    ADD_SIG("ActorRenderDispatcher::render",      "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 0F 29 7D ? 0F 29 75 ? 48 C7 45 ? ? ? ? ? 4C 89 C6 48 89 D7 48 89 CB");
+    ADD_SIG("Actor::attack",                      "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 45 ? ? ? ? ? 48 85 D2 0F 84 ? ? ? ? 44 88 45");
+    ADD_SIG("MinecraftGame::onDeviceLost",        "55 41 57 41 56 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 44 0F 29 95 ? ? ? ? 44 0F 29 8D ? ? ? ? 44 0F 29 85 ? ? ? ? 0F 29 BD ? ? ? ? 0F 29 B5 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 4C 89 CB 4D 89 C7");
+    ADD_SIG("RenderController::getOverlayColor",  "80 B9 ? ? ? ? ? 0F 85 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 10 0A");
+    ADD_SIG("Options::getGamma",                  "48 83 EC 38 48 8B 05 ? ? ? ? 48 31 E0 48 89 44 24 ? 48 8B 01 48 8B 40 08 48 8D 54 24 ? 41 B8 35 00 00 00");
+    ADD_SIG("Options::getPerspective",            "48 83 EC 38 48 8B 05 ? ? ? ? 48 31 E0 48 89 44 24 ? 48 8B 01 48 8B 40 08 48 8D 54 24 ? 41 B8 03 00 00 00");
+    ADD_SIG("Options::getHideHand",               "48 83 EC 38 48 8B 05 ? ? ? ? 48 31 E0 48 89 44 24 ? 48 8B 01 48 8B 40 08 48 8D 54 24 ? 41 B8 AB 01 00 00");
+    ADD_SIG("Tessellator::vertex",                "55 41 56 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 44 0F 29 5D ? 44 0F 29 55 ? 44 0F 29 4D ? 44 0F 29 45 ? 0F 29 7D ? 0F 29 75 ? 48 C7 45 ? ? ? ? ? 48 89 D7 48 89 CE 48 8B 89");
+    ADD_SIG("Tessellator::begin",                 "41 57 41 56 41 55 41 54 56 57 55 53 48 81 EC ? ? ? ? 48 8B 84 24");
+    ADD_SIG("MeshHelpers::renderMeshImmediately", "55 41 57 41 56 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 45 ? ? ? ? ? 48 89 D6 48 8D 55");
+    ADD_SIG("Dimension::getTimeOfDay",            "48 89 D0 41 0F 10 00 0F 11 02 F3 0F 10 05");
+    ADD_SIG("MinecraftPackets::createPacket",     "56 57 48 83 EC ? 48 8B 05 ? ? ? ? 48 31 E0 48 89 44 24 ? 48 8B 41 ? 48 85 C0 74 ? 48 83 38");
+    ADD_SIG("Actor::setNameTag",                  "55 41 57 41 56 41 55 41 54 56 57 53 48 83 EC ? 48 8D 6C 24 ? 48 C7 45 ? ? ? ? ? 66 83 FA");
+    ADD_SIG("ClientInputUpdateSystem::tick",      "55 41 56 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 0F 29 75 ? 48 C7 45 ? FE FF FF FF 48 89 55 ? 48 89 CE 48 8B 0D ? ? ? ? 48 8B 01 48 8B 40 ? BA 58 01 00 00");
+    ADD_SIG("BaseActorRenderContext",             "55 41 56 56 57 53 48 83 EC ? 48 8D 6C 24 ? 48 C7 45 ? ? ? ? ? 4C 89 C6 48 89 D7 49 89 CE 48 8D 05 ? ? ? ? 48 89 01 0F 57 C0");
+    ADD_SIG("GameCore::handleMouseInput",         "55 41 57 41 56 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 45 ? ? ? ? ? 48 89 CF 48 8D B1 ? ? ? ? 48 8B 81");
+    ADD_SIG("GuiData::_addMessage",               "55 56 57 48 83 EC ? 48 8D 6C 24 ? 48 C7 45 ? ? ? ? ? 48 89 D7 48 89 CE 48 81 C1 ? ? ? ? 48 8D 55");
+    ADD_SIG("ItemStackBase::getHoverName",        "55 56 57 48 83 EC ? 48 8D 6C 24 ? 48 C7 45 ? ? ? ? ? 4C 89 CE 48 8D 05");
+    ADD_SIG("Dimension::tick",                    "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 0F 29 B5 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 4D 89 CF 4D 89 C6 48 89 D6 48 89 CF 41 8B 80");
+    ADD_SIG("Dimension::getSkyColor",             "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 0F 29 BD ? ? ? ? 0F 29 B5 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 48 89 CE 48 8B 81 ? ? ? ? 48 3B 81");
+    ADD_SIG("AppPlatform::pickImage",             "55 56 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 44 88 CB");
+    ADD_SIG("LevelRendererPlayer::renderOutlineSelection", "55 41 56 56 57 53 48 83 EC ? 48 8D 6C 24 ? 48 C7 45 ? ? ? ? ? 44 89 CB 44 89 C6 48 89 D7 49 89 CE 48 83 79 ? ? 75");
+    ADD_SIG("Actor::vtable",                      "48 8D 05 ? ? ? ? 48 89 07 48 8D 05 ? ? ? ? 48 89 47 ? 48 8D 05 ? ? ? ? 48 89 BD");
+    ADD_SIG("_updatePlayer",                      "41 57 41 56 41 55 41 54 56 57 55 53 48 81 EC ? ? ? ? 44 0F 29 94 24 ? ? ? ? 44 0F 29 8C 24 ? ? ? ? 44 0F 29 84 24 ? ? ? ? 0F 29 BC 24 ? ? ? ? 0F 29 B4 24 ? ? ? ? 4C 89 C6");
+    ADD_SIG("RaknetTick",                         "55 41 57 41 56 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 85 ? ? ? ? ? ? ? ? 80 BA ? ? ? ? ? 0F 85 ? ? ? ? 4C 89 CF");
+    ADD_SIG("ItemStack::_loadItem",               "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 48 C7 45 ? ? ? ? ? 48 85 D2 0F 84 ? ? ? ? 44 88 45");
+    ADD_SIG("MolangVariableMap::getOrAddMolangVariable", "55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC ? ? ? ? 48 8D AC 24 ? ? ? ? 0F 29 7D ? 0F 29 75 ? 48 C7 45 ? ? ? ? ? 4C 89 C6 48 89 D7 48 89 CB");
+}
