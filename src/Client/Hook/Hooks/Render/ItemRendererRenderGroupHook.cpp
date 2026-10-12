@@ -1,7 +1,6 @@
 #include "ItemRendererRenderGroupHook.hpp"
 #include "../../../Events/EventManager.hpp"
 #include "../../../Events/Render/ItemRendererEvent.hpp"
-#include "../../../Module/Modules/ItemPhysics/ItemPhysics.hpp"
 #include "../../../Module/Manager.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL

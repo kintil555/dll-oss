@@ -81,8 +81,6 @@ file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.hpp")
 file(GLOB_RECURSE LIB_FILES "lib/*.cpp" "lib/*.h")
 add_library(Flarial SHARED main.cpp ${SOURCE_FILES} ${LIB_FILES} src/Assets/Assets.rc
         src/SDK/Client/Network/Packet/AnimatePacket.hpp
-        src/Client/Module/Modules/Subtitles/Subtitles.cpp
-        src/Client/Module/Modules/Subtitles/Subtitles.hpp
         src/Client/Events/Game/SoundEnginePlayEvent.hpp
         src/SDK/Client/Network/Packet/TakeItemActorPacket.hpp)
 
@@ -194,15 +192,6 @@ FetchContent_MakeAvailable(libhat entt nes fmt magic_enum LuaBridge safetyhook j
 target_link_libraries(Flarial PRIVATE jsoncpp safetyhook libcurl ws2_32.lib crypt32.lib normaliz.lib wldap32.lib LuaBridge lua_static libhat fmt::fmt EnTT::EnTT NES windowscodecs.lib urlmon.lib dwrite.lib d3d12.lib dxgi.lib d3d11.lib d2d1.lib wininet.lib setupapi.lib version FreeType magic_enum runtimeobject discord-rpc rift)
 
 target_link_libraries(Flarial PUBLIC MinHook)
-
-if (EXISTS "${CMAKE_SOURCE_DIR}/compiledoom.txt")
-    message(WARNING "Compiling with Doom Module, Flarial may freeze or crash.")
-    add_compile_definitions(COMPILE_DOOM)
-    file(GLOB_RECURSE DOOM_SOURCES "src/Client/Module/Modules/Doom/doomgeneric/*.c" "src/Client/Module/Modules/Doom/doomgeneric/*.h")
-    add_library(DoomModule ${DOOM_SOURCES}
-            src/SDK/Client/Network/Packet/TakeItemActorPacket.hpp)
-    target_link_libraries(Flarial PRIVATE DoomModule)
-endif ()
 
 target_precompile_headers(Flarial PRIVATE "src/PCH.hpp")
 

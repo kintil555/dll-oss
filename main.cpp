@@ -18,7 +18,6 @@
 #include "Scripting/ScriptManager.hpp"
 #include "Utils/Memory/Game/SignatureAndOffsetManager.hpp"
 #include "src/Utils/Logger/crashlogs.hpp"
-#include "src/Client/Module/Modules/Nick/NickModule.hpp"
 #include "src/Client/Command/CommandManager.hpp"
 #include "src/SDK/Client/Options/OptionsParser.hpp"
 #include "Utils/APIUtils.hpp"
@@ -178,12 +177,6 @@ DWORD WINAPI init() {
                         ipToSend = "is.anonymous";
                     } else if (ipToSend.find("none") != std::string::npos || ipToSend.empty()) {
                         ipToSend = "in.singleplayer";
-                    }
-
-                    auto module = ModuleManager::getModule("Nick");
-                    if (module && module->isEnabled()) {
-                        name = String::removeNonAlphanumeric(String::removeColorCodes(NickModule::original));
-                        name = String::replaceAll(name, "�", "");
                     }
 
                     std::string clearedName = String::removeNonAlphanumeric(String::removeColorCodes(name));

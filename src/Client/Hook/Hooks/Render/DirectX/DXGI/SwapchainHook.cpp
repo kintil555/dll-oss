@@ -13,7 +13,6 @@
 #include "CreateSwapChainForHwndHook.hpp"
 #include "CreateSwapchainForCoreWindowHook.hpp"
 #include "ResizeHook.hpp"
-#include "../../../../../Module/Modules/DepthOfField/DepthOfFieldHelper.hpp"
 #include "../../../../../Module/Manager.hpp"
 using ::IUnknown;
 
@@ -709,10 +708,6 @@ void SwapchainHook::SaveDepthmap(ID3D11DeviceContext* pContext, ID3D11DepthStenc
 
     pContext->CopyResource(cachedDepthMapTexture.get(), pDepthBuffer);
 
-    DepthOfFieldHelper::pDepthMapSRV = cachedDepthMapSRV.get();
-
-    DepthOfFieldHelper::isMSAADepth = isMSAA;
-    DepthOfFieldHelper::msaaSampleCount = desc.SampleDesc.Count;
 
     pDepthBuffer->Release();
 }

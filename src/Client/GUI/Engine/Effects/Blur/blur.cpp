@@ -5,7 +5,7 @@
 #include "Client.hpp"
 #include "../../Engine.hpp"
 #include "../../../../Hook/Hooks/Render/DirectX/DXGI/SwapchainHook.hpp"
-#include "../../../../Module/Modules/MotionBlur/MotionBlur.hpp"
+#include "BackbufferSRV.hpp"
 
 // CREDITS @MR CHIPS (@chyves)
 
@@ -348,7 +348,7 @@ void Blur::RenderBlur(ID3D11RenderTargetView *pDstRenderTargetView, int iteratio
     auto backbuffer = SwapchainHook::GetBackbuffer();
     if (!backbuffer) return;
 
-    winrt::com_ptr<ID3D11ShaderResourceView> pOrigShaderResourceView = MotionBlur::BackbufferToSRVExtraMode();
+    winrt::com_ptr<ID3D11ShaderResourceView> pOrigShaderResourceView = BackbufferSRV::Extra();
     if (!pOrigShaderResourceView) {
         return;
     }

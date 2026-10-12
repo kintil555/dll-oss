@@ -6,7 +6,6 @@
 #include "SDK/Client/Core/ClientInstance.hpp"
 #include "Module/Manager.hpp"
 #include "Client.hpp"
-#include "Modules/Nick/NickModule.hpp"
 #include "Utils/APIUtils.hpp"
 #include <filesystem>
 #include <fstream>

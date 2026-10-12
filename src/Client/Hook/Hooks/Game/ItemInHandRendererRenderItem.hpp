@@ -2,7 +2,6 @@
 
 #include "../Hook.hpp"
 #include "../../../../Utils/Memory/Game/SignatureAndOffsetManager.hpp"
-#include "../../../Module/Modules/ItemPhysics/ItemPhysics.hpp"
 #include "../../../Module/Manager.hpp"
 
 /* dont be misled by the name this function is still used for items
@@ -30,8 +29,6 @@ private:
         }
         else if(SDK::clientInstance && SDK::clientInstance->getLocalPlayer()) {
 
-            static auto itemPhysics = ModuleManager::getModule("Item Physics");
-
             ActorRenderData data{};
             data.actor = entity;
             auto* rotComp = entity->getActorRotationComponent();
@@ -47,10 +44,6 @@ private:
 
             auto res = funcOriginal(a1, a2, entity, itemStack, a5, a6, a7, a8);
             stack.pop();
-
-            if (itemPhysics) {
-                static_cast<ItemPhysics*>(itemPhysics.get())->clearRenderData();
-            }
 
             return res;
         }

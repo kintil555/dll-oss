@@ -1,6 +1,5 @@
 #include "UnderUIHooks.hpp"
 #include "SwapchainHook.hpp"
-#include "Modules/DepthOfField/DepthOfFieldHelper.hpp"
 #include "Utils/Logger/Logger.hpp"
 #include "SDK/Client/Options/OptionsParser.hpp"
 

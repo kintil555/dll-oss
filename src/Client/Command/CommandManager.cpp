@@ -12,11 +12,9 @@
 #include "Commands/EjectCommand.hpp"
 #include "Commands/TestCommand.hpp"
 #include "Commands/CrashTestCommand.hpp"
-#include "Commands/SkinStealCommand.hpp"
 #include "Commands/SpotifyCommand/SpotifyCommand.hpp"
 #include "Commands/WikiCommand.hpp"
 #include "Commands/FixFontCommand.hpp"
-#include "Commands/WaypointCommand.hpp"
 #include "Commands/DiagCommand.hpp"
 #include "Commands/ExportGeoCommand.hpp"
 // #include "Commands/IRCChat.hpp"
@@ -38,14 +36,12 @@ void CommandManager::initialize()
     Commands.push_back(std::make_unique<LuaCommand>());
     Commands.push_back(std::make_unique<PathCommand>());
     Commands.push_back(std::make_unique<EjectCommand>());
-    Commands.push_back(std::make_unique<SkinStealCommand>());
     Commands.push_back(std::make_unique<ConfigCommand>());
     // Commands.push_back(std::make_unique<SpotifyCommand>());
     Commands.push_back(std::make_unique<BindCommand>());
     Commands.push_back(std::make_unique<UnbindCommand>());
     Commands.push_back(std::make_unique<WikiCommand>());
     Commands.push_back(std::make_unique<FixFontCommand>());
-    Commands.push_back(std::make_unique<WaypointCommand>());
     Commands.push_back(std::make_unique<DiagCommand>());
     Commands.push_back(std::make_unique<ExportGeoCommand>());
     // Commands.push_back(std::make_unique<NotebotCommand>());

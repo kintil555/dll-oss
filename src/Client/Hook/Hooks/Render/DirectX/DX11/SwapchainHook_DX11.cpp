@@ -20,8 +20,6 @@
 #include "unknwnbase.h"
 #include "../DXGI/UnderUIHooks.hpp"
 #include "../DXGI/ResizeHook.hpp"
-#include "Modules/MotionBlur/MotionBlur.hpp"
-#include "Modules/DepthOfField/DepthOfFieldHelper.hpp"
 using ::IUnknown;
 
 void SwapchainHook::DX11Init() {
@@ -92,13 +90,6 @@ void SwapchainHook::DX11Init() {
     }
 
     Blur::InitializePipeline();
-    DepthOfFieldHelper::InitializePipeline();
-    if (!MotionBlur::initted) {
-        bool avgInit = AvgPixelMotionBlurHelper::Initialize();
-        bool realInit = RealMotionBlurHelper::Initialize();
-        MotionBlur::initted = avgInit && realInit;
-        Logger::debug("[MotionBlur] Initialized: avgPixel={}, real={}, initted={}", avgInit, realInit, MotionBlur::initted);
-    }
 
     SaveBackbuffer();
 

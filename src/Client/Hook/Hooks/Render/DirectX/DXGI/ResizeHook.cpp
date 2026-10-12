@@ -12,14 +12,7 @@
 #include "SwapchainHook.hpp"
 #include "../../../../../Module/Modules/ClickGUI/Elements/ClickGUIElements.hpp"
 #include "../../../../../Module/Manager.hpp"
-#include "../../../../../Module/Modules/GuiScale/GuiScale.hpp"
-#include "../../../../../Module/Modules/TabList/TabList.hpp"
 #include "GUI/Engine/Elements/Structs/ImagesClass.hpp"
-#include "../../../../../Module/Modules/MotionBlur/MotionBlur.hpp"
-#include "../../../../../Module/Modules/MotionBlur/AvgPixelMotionBlurHelper.hpp"
-#include "../../../../../Module/Modules/MotionBlur/RealMotionBlurHelper.hpp"
-#include "../../../../../Module/Modules/DepthOfField/DepthOfFieldHelper.hpp"
-#include "../../../../../Module/Modules/CustomCrosshair/CustomCrosshair.hpp"
 
 void ResizeHook::enableHook() {
     // Phase 1: Hook Resize using kiero's vtable guess.
@@ -131,7 +124,6 @@ void ResizeHook::resizeCallback(IDXGISwapChain* pSwapChain, UINT bufferCount, UI
     auto module = ModuleManager::getModule("ClickGUI");
     if (module != nullptr && module->active && SDK::hasInstanced && SDK::clientInstance != nullptr)
         SDK::clientInstance->releaseMouse();
-    GuiScale::fixResize = true;
     if (SwapchainHook::currentVsyncState) flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
     return funcOriginal(pSwapChain, bufferCount, width, height, newFormat, flags);
 }
@@ -144,7 +136,6 @@ void ResizeHook::resizeCallback121120(IDXGISwapChain* pSwapChain, UINT bufferCou
     auto module = ModuleManager::getModule("ClickGUI");
     if (module != nullptr && module->active && SDK::hasInstanced && SDK::clientInstance != nullptr)
         SDK::clientInstance->releaseMouse();
-    GuiScale::fixResize = true;
     if (SwapchainHook::currentVsyncState) flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
     return funcOriginal121120(pSwapChain, bufferCount, width, height, newFormat, flags, pCreationNodeMask, ppPresentQueue);
 }
@@ -271,14 +262,6 @@ void ResizeHook::cleanupResources(bool fullReset) {
 
     ImagesClass::images.clear();
 
-    // Clean up TabList resources for both fullReset and normal resize
-    TabList::CleanupDX12Uploader();
-    TabList::CleanupPlayerHeadTextures();
-    TabList::ResetDescriptorState();
-
-    // Reinitialize async loading after cleanup so player heads continue to load
-    TabList::ReinitializeAfterResize();
-
     if (fullReset) {
         FlarialGUI::hasLoadedAll = false;
         for (auto& [id, texture] : ImagesClass::ImguiDX12Textures) {
@@ -339,33 +322,6 @@ void ResizeHook::cleanupResources(bool fullReset) {
         SwapchainHook::dx12FrameCount = 0;
         SwapchainHook::cachedDX12FenceValue = 0;
 
-        // --- AvgPixelMotionBlurHelper resources ---
-        AvgPixelMotionBlurHelper::m_pixelShader = nullptr;
-        AvgPixelMotionBlurHelper::m_vertexShader = nullptr;
-        AvgPixelMotionBlurHelper::m_inputLayout = nullptr;
-        AvgPixelMotionBlurHelper::m_constantBuffer = nullptr;
-        AvgPixelMotionBlurHelper::m_vertexBuffer = nullptr;
-        AvgPixelMotionBlurHelper::m_depthStencilState = nullptr;
-        AvgPixelMotionBlurHelper::m_blendState = nullptr;
-        AvgPixelMotionBlurHelper::m_rasterizerState = nullptr;
-        AvgPixelMotionBlurHelper::m_samplerState = nullptr;
-        for (auto& srv : AvgPixelMotionBlurHelper::m_srvCache) srv = nullptr;
-        AvgPixelMotionBlurHelper::m_srvCache.clear();
-        for (auto& srv : AvgPixelMotionBlurHelper::m_nullSRVCache) srv = nullptr;
-        AvgPixelMotionBlurHelper::m_nullSRVCache.clear();
-        // --- RealMotionBlurHelper resources ---
-        RealMotionBlurHelper::m_pixelShader = nullptr;
-        RealMotionBlurHelper::m_vertexShader = nullptr;
-        RealMotionBlurHelper::m_inputLayout = nullptr;
-        RealMotionBlurHelper::m_constantBuffer = nullptr;
-        RealMotionBlurHelper::m_vertexBuffer = nullptr;
-        RealMotionBlurHelper::m_depthStencilState = nullptr;
-        RealMotionBlurHelper::m_blendState = nullptr;
-        RealMotionBlurHelper::m_rasterizerState = nullptr;
-        RealMotionBlurHelper::m_samplerState = nullptr;
-
-        DepthOfFieldHelper::Cleanup();
-        MotionBlur::initted = false;
         FlarialGUI::hasLoadedAll = false;
     }
 }
