@@ -174,22 +174,10 @@ FetchContent_Declare(
        GIT_TAG mcbe
 )
 
-FetchContent_Declare(
-        discord-rpc
-        GIT_REPOSITORY https://github.com/EclipseMenu/discord-presence.git
-        GIT_TAG main
-)
-
-FetchContent_Declare(
-        rift
-        GIT_REPOSITORY https://github.com/EclipseMenu/rift.git
-        GIT_TAG v2.0.2
-)
-
 set(FMT_MODULE OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(libhat entt nes fmt magic_enum LuaBridge safetyhook jsoncpp discord-rpc rift)
+FetchContent_MakeAvailable(libhat entt nes fmt magic_enum LuaBridge safetyhook jsoncpp)
 
-target_link_libraries(Flarial PRIVATE jsoncpp safetyhook libcurl ws2_32.lib crypt32.lib normaliz.lib wldap32.lib LuaBridge lua_static libhat fmt::fmt EnTT::EnTT NES windowscodecs.lib urlmon.lib dwrite.lib d3d12.lib dxgi.lib d3d11.lib d2d1.lib wininet.lib setupapi.lib version FreeType magic_enum runtimeobject discord-rpc rift)
+target_link_libraries(Flarial PRIVATE jsoncpp safetyhook libcurl ws2_32.lib crypt32.lib normaliz.lib wldap32.lib LuaBridge lua_static libhat fmt::fmt EnTT::EnTT NES windowscodecs.lib urlmon.lib dwrite.lib d3d12.lib dxgi.lib d3d11.lib d2d1.lib wininet.lib setupapi.lib version FreeType magic_enum runtimeobject)
 
 target_link_libraries(Flarial PUBLIC MinHook)
 

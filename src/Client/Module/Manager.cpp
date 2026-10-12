@@ -8,7 +8,6 @@
 #include "Modules/Module.hpp"
 #include "Modules/Misc/CentreCursor/CentreCursorListener.hpp"
 #include "Modules/Misc/Uninject/UninjectListener.hpp"
-#include "Modules/Misc/DiscordRPC/DiscordRPCListener.hpp"
 #include "Modules/Misc/HiveModeCatcher/HiveModeCatcherListener.hpp"
 #include <Modules/Misc/InputImGUi/GUIMouseListener.hpp>
 #include <Modules/Misc/InputImGUi/GUIKeyListener.hpp>
@@ -63,7 +62,6 @@ void ModuleManager::initialize() {
 	if (!VersionUtils::checkAboveOrEqual(21, 60)) {
 		addService<PackChanger>();
 	}
-	addService<DiscordRPCListener>();
 	addService<UninjectListener>();
 	addService<SaveConfigListener>();
 	addService<CentreCursorListener>();

@@ -14,7 +14,11 @@
 
 #include "curl/curl/curl.h"
 #include "Hook/Hooks/Game/UnicodeWndProcHack.hpp"
-#include "Modules/Misc/DiscordRPC/DiscordRPCListener.hpp"
+#include "Hook/Hooks/Input/MouseHook.hpp"
+#include "Client.hpp"
+#include "Modules/Misc/HiveModeCatcher/HiveModeCatcherListener.hpp"
+#include "Utils/PlatformUtils.hpp"
+#include "Utils/Threading.hpp"
 #include "Scripting/ScriptManager.hpp"
 #include "Utils/Memory/Game/SignatureAndOffsetManager.hpp"
 #include "src/Utils/Logger/crashlogs.hpp"
