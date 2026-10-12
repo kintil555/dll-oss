@@ -65,7 +65,7 @@ jobs:
           fi
 
   windows-build:
-    runs-on: [self-hosted, linux, x64, wine, msvc]
+    runs-on: windows-latest
     needs: check-commit
     outputs:
       type: ${{ needs.check-commit.outputs.type }}
@@ -75,27 +75,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build DLL with Wine+MSVC (${{ needs.check-commit.outputs.build_config }})
+      - name: Setup MSVC (x64)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build DLL with MSVC (${{ needs.check-commit.outputs.build_config }})
+        shell: cmd
         run: |
-          export WINEPREFIX=/opt/wine
-          source /opt/msvc/bin/x64/msvcenv.sh
-          CPPWINRT="/opt/msvc/Windows Kits/10/Include/10.0.26100.0/cppwinrt"
-
-          rm -rf build
-          mkdir build
-          cd build
-
-          cmake -G Ninja \
-            -DCMAKE_BUILD_TYPE=${{ needs.check-commit.outputs.build_config }} \
-            -DCMAKE_C_COMPILER=/opt/msvc/bin/x64/cl \
-            -DCMAKE_CXX_COMPILER=/opt/msvc/bin/x64/cl \
-            -DCMAKE_LINKER=/opt/msvc/bin/x64/link \
-            -DCMAKE_RC_COMPILER=/opt/msvc/bin/x64/rc \
-            -DCMAKE_SYSTEM_NAME=Windows \
-            "-DCMAKE_CXX_FLAGS=/I\"$CPPWINRT\"" \
-            ..
-
-          ninja -j$(nproc)
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ needs.check-commit.outputs.build_config }} -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
+          if errorlevel 1 exit /b 1
+          cmake --build build --parallel
 
       - name: Upload DLL and PDB Artifacts
         uses: actions/upload-artifact@v4.6.1
@@ -108,7 +98,7 @@ jobs:
   upload-to-cdn:
     runs-on: ubuntu-latest
     needs: [check-commit, windows-build]
-    if: needs.check-commit.outputs.type != '3' && github.event_name != 'workflow_dispatch'
+    if: github.repository_owner == 'flarialmc' && needs.check-commit.outputs.type != '3' && github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout newcdn repository
         uses: actions/checkout@v4
